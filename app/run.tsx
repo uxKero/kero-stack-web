@@ -265,7 +265,7 @@ function Reel({ cards, kRef, onVote, judgeIndex, dealKey }: { cards: CardData[];
     let ch = 0;
     let sources: HTMLCanvasElement[] = [];
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const S = Math.min(3, dpr * 1.6);
+    const S = Math.min(4, dpr * 2.4);
     const layer = document.createElement('canvas');
     const lctx = layer.getContext('2d');
     if (!lctx) return;
@@ -306,8 +306,27 @@ function Reel({ cards, kRef, onVote, judgeIndex, dealKey }: { cards: CardData[];
         el.width = next.width;
         el.height = next.height;
         el.getContext('2d')?.drawImage(next, 0, 0);
+        mirrors.delete(el);
       });
       shown = -1;
+    };
+
+    const mirrors = new WeakMap<HTMLCanvasElement, HTMLCanvasElement>();
+    const mirrorOf = (src: HTMLCanvasElement) => {
+      let m = mirrors.get(src);
+      if (!m || m.width !== src.width) {
+        m = document.createElement('canvas');
+        m.width = src.width;
+        m.height = src.height;
+        const mc = m.getContext('2d');
+        if (mc) {
+          mc.translate(m.width, 0);
+          mc.scale(-1, 1);
+          mc.drawImage(src, 0, 0);
+        }
+        mirrors.set(src, m);
+      }
+      return m;
     };
 
     const draw = () => {
@@ -370,9 +389,15 @@ function Reel({ cards, kRef, onVote, judgeIndex, dealKey }: { cards: CardData[];
         }
         if (cx + cw / 2 < -W || cx - cw / 2 > W * 2) continue;
         const left = cx - cw / 2;
+        const dk = i - k;
+        const turn = dk < 0 ? smooth(Math.min(1, -dk)) : 0;
+        const theta = Math.PI * turn;
+        const cos = Math.cos(theta);
+        const sin = Math.sin(theta);
+        const P = cw * 3.2;
         const fu0 = Math.min(cw, Math.max(0, c - F - left));
         const fu1 = Math.min(cw, Math.max(0, c + F - left));
-        const flat = fu0 <= 0 && fu1 >= cw;
+        const flat = fu0 <= 0 && fu1 >= cw && turn < 0.001;
         ctx.save();
         ctx.translate(0, liftY);
         if (flat) {
@@ -382,36 +407,36 @@ function Reel({ cards, kRef, onVote, judgeIndex, dealKey }: { cards: CardData[];
           lctx.globalCompositeOperation = 'source-over';
           lctx.clearRect(0, 0, layer.width, layer.height);
           lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          if (fu1 > fu0) {
-            lctx.drawImage(src, fu0 * S, 0, (fu1 - fu0) * S, ch * S, left + fu0, (H - ch) / 2, fu1 - fu0, ch);
-          }
-          const slices = (a: number, b: number) => {
-            if (b - a < 0.01) return;
-            const n = Math.ceil(b - a);
-            const step = (b - a) / n;
-            for (let q = 0; q < n; q++) {
-              const u0 = a + q * step;
-              const x0 = warp(left + u0);
-              const x1 = warp(left + u0 + step);
-              if (x1 < -2 || x0 > W + 2) continue;
-              const lf = lift((x0 + x1) / 2);
-              const hh = ch * lf;
-              lctx.drawImage(src, u0 * S, 0, step * S, ch * S, x0, (H - hh) / 2, x1 - x0 + 0.8, hh);
-            }
-          };
-          slices(0, fu0);
-          slices(fu1, cw);
-
-          const edge: [number, number][] = [];
-          const n = Math.ceil(cw / 1.5);
+          const n = Math.ceil(cw);
+          const xs: number[] = [];
+          const hs: number[] = [];
           for (let q = 0; q <= n; q++) {
-            const x = warp(left + (q / n) * cw);
-            edge.push([x, ch * lift(x)]);
+            const x0 = (q / n - 0.5) * cw;
+            const sc = P / (P + x0 * sin);
+            const X = warp(cx + x0 * cos * sc);
+            xs.push(X);
+            hs.push(ch * sc * lift(X));
+          }
+          const back = cos < 0;
+          const img = back ? mirrorOf(src) : src;
+          const sw = (cw / n) * S;
+          for (let q = 0; q < n; q++) {
+            const xa = Math.min(xs[q], xs[q + 1]);
+            const w = Math.abs(xs[q + 1] - xs[q]);
+            if (xa + w < -2 || xa > W + 2 || w < 0.01) continue;
+            const hh = Math.max(hs[q], hs[q + 1]) + 2;
+            const sx = back ? (n - q - 1) * sw : q * sw;
+            const parts = Math.max(1, Math.ceil(w / 1.5));
+            const pw = w / parts;
+            const psw = sw / parts;
+            for (let j = 0; j < parts; j++) {
+              lctx.drawImage(img, sx + j * psw, 0, psw, ch * S, xa + j * pw - 0.3, (H - hh) / 2, pw + 0.6, hh);
+            }
           }
           lctx.globalCompositeOperation = 'destination-in';
           lctx.beginPath();
-          edge.forEach(([x, hh], q) => (q ? lctx.lineTo(x, (H - hh) / 2) : lctx.moveTo(x, (H - hh) / 2)));
-          for (let q = edge.length - 1; q >= 0; q--) lctx.lineTo(edge[q][0], (H + edge[q][1]) / 2);
+          xs.forEach((x, q) => (q ? lctx.lineTo(x, (H - hs[q]) / 2) : lctx.moveTo(x, (H - hs[q]) / 2)));
+          for (let q = xs.length - 1; q >= 0; q--) lctx.lineTo(xs[q], (H + hs[q]) / 2);
           lctx.closePath();
           lctx.fill();
           lctx.globalCompositeOperation = 'source-over';

@@ -10,6 +10,8 @@ import { ContextMenu } from './contextmenu';
 import { Band, Footer, HeroStage, Setup, SharedField, Taste } from './sections';
 import { Orca } from './orca';
 import { Wordmark } from './wordmark';
+import { Notice } from './notice';
+import { forAgents } from './for-agents';
 
 const AGENTS = [
   ['Claude Code', '~/.claude/skills/', '.claude/skills/'],
@@ -89,6 +91,15 @@ export function Home({ lang }: { lang: Lang }) {
     window.location.href = lang === 'en' ? '/es' : '/';
   };
 
+  const [agentsCopied, setAgentsCopied] = useState(false);
+  const copyForAgents = async () => {
+    try {
+      await navigator.clipboard.writeText(forAgents());
+      setAgentsCopied(true);
+      setTimeout(() => setAgentsCopied(false), 1600);
+    } catch {}
+  };
+
   return (
     <div className="page">
       <header className="bar">
@@ -96,6 +107,10 @@ export function Home({ lang }: { lang: Lang }) {
           <Wordmark />
         </p>
         <nav className="bar-nav">
+          <button type="button" className={`pill pill-agents ${agentsCopied ? 'is-copied' : ''}`} onClick={copyForAgents} aria-label={agentsCopied ? t.hero.copied : t.hero.forAgents}>
+            {agentsCopied ? <CopySuccess size={18} /> : <Copy size={18} />}
+            <span className="pill-label" aria-live="polite">{agentsCopied ? t.hero.copied : t.hero.forAgents}</span>
+          </button>
           <a href={REPO} className="pill">{t.hero.github}</a>
           <button type="button" className="pill" onClick={toggleLang} aria-label={t.langSwitch}>
             <Translate size={18} />
@@ -134,6 +149,7 @@ export function Home({ lang }: { lang: Lang }) {
       </div>
       <ScrollRail top={t.rail.top} bottom={t.rail.bottom} />
       <ContextMenu lang={lang} onLang={toggleLang} />
+      <Notice lang={lang} />
     </div>
   );
 }

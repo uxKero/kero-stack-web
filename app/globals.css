@@ -167,6 +167,33 @@ code,
   transition: transform 160ms var(--ease), box-shadow 160ms var(--ease);
 }
 
+.pill-agents {
+  gap: 0;
+  padding: 0 13px;
+}
+
+.pill-agents .pill-label {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  transition: max-width 320ms var(--ease), margin 320ms var(--ease), opacity 200ms var(--ease);
+}
+
+.pill-agents:hover .pill-label,
+.pill-agents:focus-visible .pill-label,
+.pill-agents.is-copied .pill-label {
+  max-width: 180px;
+  margin-left: 8px;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-agents .pill-label {
+    transition: none;
+  }
+}
+
 .pill:active,
 .round:active,
 .ghost:active,
@@ -179,6 +206,9 @@ code,
   .pill:hover {
     box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.28);
   }
+}
+
+@media (max-width: 720px) {
 }
 
 /* Hero */
@@ -5652,4 +5682,91 @@ a.taste-card {
 .agent.is-away {
   opacity: 0;
   pointer-events: none;
+}
+
+.notice {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 8px 8px 8px 20px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--ground);
+  box-shadow: 0 16px 40px -16px rgba(17, 17, 17, 0.5);
+  font-size: 14px;
+  line-height: 1.45;
+  transform: translateX(-50%);
+  animation: notice-in 420ms var(--ease) both;
+}
+
+.notice.is-out {
+  animation: notice-out 260ms var(--ease) both;
+}
+
+.notice p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.notice a {
+  color: var(--ground);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.notice button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: #b9b7b0;
+  transition: color 160ms var(--ease), background 160ms var(--ease);
+}
+
+.notice button:hover {
+  color: var(--ground);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.notice a:focus-visible,
+.notice button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@keyframes notice-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px) scale(0.98);
+  }
+}
+
+@keyframes notice-out {
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+}
+
+@media (max-width: 720px) {
+  .notice {
+    bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notice,
+  .notice.is-out {
+    animation-duration: 1ms;
+  }
 }

@@ -61,7 +61,7 @@ export const SWATCHES = ['#efe7da', '#1d1a16', '#b5562b', '#6b7b4c'];
 
 export type Copy = {
   langSwitch: string;
-  hero: { before: string; mark: string; line: string; copy: string; copied: string; github: string; where: string };
+  hero: { before: string; mark: string; line: string; copy: string; copied: string; github: string; where: string; forAgents: string };
   agents: { agent: string; personal: string; project: string; note: string };
   run: {
     label: string;
@@ -98,6 +98,7 @@ export type Copy = {
   paper: { read: string; close: string; do: string; dont: string; sources: string; people: string; example: string; why: string; how: string; edge: string; agents: string; copy: string; copied: string; enforced: string; prev: string; next: string };
   lumbre: { nav: string[]; hero: string; cta: string; products: { name: string; price: string }[]; spec: string; note: string; arrive: string };
   setup: { job: string; skills: string; ready: string };
+  notice: { before: string; link: string; after: string; close: string };
   orca: { title: string; body: string[]; by: string; open: string; alt: string };
   links: { title: string; items: { label: string; href: string }[] }[];
   deck: { title: string; prev: string; next: string; flip: string; back: string; hint: string };
@@ -284,6 +285,7 @@ export const COPY: Record<Lang, Copy> = {
       copied: 'Copied',
       github: 'GitHub',
       where: 'Where the skills go',
+      forAgents: 'Copy for agents',
     },
     agents: { agent: 'Agent', personal: 'Personal', project: 'Per project', note: 'kero-audit runs in any browser tool. Playwright adds focus, states and screenshots.' },
     run: {
@@ -410,6 +412,7 @@ export const COPY: Record<Lang, Copy> = {
       arrive: 'Arrives Thursday',
     },
     setup: { job: 'Installing kero-stack', skills: '7 skills', ready: 'Restart your agent and bring your references.' },
+    notice: { before: 'Some components are inspired by the work of other designers and built to show what ', link: 'anydesign', after: ' can do.', close: 'Close' },
     orca: {
       title: 'Where it runs',
       body: [
@@ -466,6 +469,7 @@ export const COPY: Record<Lang, Copy> = {
       copied: 'Copiado',
       github: 'GitHub',
       where: 'Dónde van las skills',
+      forAgents: 'Copiar para agentes',
     },
     agents: { agent: 'Agente', personal: 'Personal', project: 'Por proyecto', note: 'kero-audit funciona con cualquier navegador. Playwright suma foco, estados y capturas.' },
     run: {
@@ -592,6 +596,7 @@ export const COPY: Record<Lang, Copy> = {
       arrive: 'Llega el jueves',
     },
     setup: { job: 'Instalando kero-stack', skills: '7 skills', ready: 'Reinicia tu agente y trae tus referencias.' },
+    notice: { before: 'Algunos componentes se inspiran en el trabajo de otros diseñadores y están hechos para mostrar lo que puede hacer ', link: 'anydesign', after: '.', close: 'Cerrar' },
     orca: {
       title: 'Dónde corre',
       body: [
