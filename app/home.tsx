@@ -111,7 +111,7 @@ export function Home({ lang }: { lang: Lang }) {
             {agentsCopied ? <CopySuccess size={18} /> : <Copy size={18} />}
             <span className="pill-label" aria-live="polite">{agentsCopied ? t.hero.copied : t.hero.forAgents}</span>
           </button>
-          <a href={REPO} className="pill">{t.hero.github}</a>
+          <a href={REPO} className="pill" target="_blank" rel="noopener noreferrer">{t.hero.github}</a>
           <button type="button" className="pill" onClick={toggleLang} aria-label={t.langSwitch}>
             <Translate size={18} />
             {lang === 'en' ? 'ES' : 'EN'}
