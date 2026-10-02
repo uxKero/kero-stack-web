@@ -1,0 +1,22 @@
+{
+  "name": "kero-stack-web",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3210",
+    "build": "next build",
+    "start": "next start -p 3210"
+  },
+  "dependencies": {
+    "iconsax-reactjs": "^0.0.8",
+    "next": "16.3.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "playwright-core": "^1.55.0",
+    "typescript": "^5"
+  }
+}
