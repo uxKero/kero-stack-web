@@ -153,15 +153,19 @@ function paintCard(card: HTMLCanvasElement, d: CardData, w: number, h: number, d
   c.textBaseline = 'top';
   c.textAlign = 'left';
   const fs = Math.max(15, Math.round(w * 0.042));
-  c.font = `600 ${fs}px ${font}`;
-  c.fillText(d.name, pad, pad);
-  c.fillStyle = 'rgba(255,255,255,0.86)';
-  c.font = `400 ${fs}px ${font}`;
-  wrap(c, d.out, w * 0.56).forEach((l, i) => c.fillText(l, pad, pad + fs * 1.3 * (i + 1)));
-
   c.font = `500 ${Math.max(14, Math.round(w * 0.036))}px ${font}`;
   const cw = c.measureText(d.chip).width + 22;
   const ch = fs * 1.7;
+  c.font = `600 ${fs}px ${font}`;
+  const phone = typeof window !== 'undefined' && window.innerWidth <= 720;
+  const crowded = phone && pad + c.measureText(d.name).width + 12 > w - pad - cw;
+  const ty0 = crowded ? pad + ch : pad;
+  c.fillText(d.name, pad, ty0);
+  c.fillStyle = 'rgba(255,255,255,0.86)';
+  c.font = `400 ${fs}px ${font}`;
+  wrap(c, d.out, crowded ? w - pad * 2 : w * 0.56).forEach((l, i) => c.fillText(l, pad, ty0 + fs * 1.3 * (i + 1)));
+
+  c.font = `500 ${Math.max(14, Math.round(w * 0.036))}px ${font}`;
   c.fillStyle = 'rgba(255,255,255,0.22)';
   rounded(c, w - pad - cw, pad - ch * 0.12, cw, ch, ch / 2);
   c.fill();
@@ -217,9 +221,15 @@ function paintCard(card: HTMLCanvasElement, d: CardData, w: number, h: number, d
       c.fillText(k === 0 ? v.one : v.two, x, ty + th + w * 0.05);
     });
   } else {
+    c.font = `400 ${Math.max(14, Math.round(w * 0.034))}px ${font}`;
+    const counter = c.measureText(`${d.num} / ${d.total}`).width;
     c.font = `500 ${fs}px ${font}`;
     c.fillStyle = '#fff';
-    const lines = d.lines.flatMap((l) => wrap(c, l, w * 0.74));
+    let lines = d.lines.flatMap((l) => wrap(c, l, w * 0.74));
+    const last = lines[lines.length - 1];
+    if (phone && last && pad + c.measureText(last).width + 16 > w - pad - counter) {
+      lines = d.lines.flatMap((l) => wrap(c, l, w - pad * 2 - counter - 16));
+    }
     lines.forEach((l, i) => c.fillText(l, pad, h - pad - (lines.length - 1 - i) * fs * 1.32));
   }
   c.fillStyle = 'rgba(255,255,255,0.8)';
@@ -619,6 +629,9 @@ export function Run({ lang, title }: { lang: Lang; title: string }) {
     const li = btn.parentElement as HTMLElement;
     const measure = () => setPill({ x: li.offsetLeft, w: li.offsetWidth, person: t.steps[flow[active]].who === 'person' });
     measure();
+    if (list.scrollWidth > list.clientWidth + 1) {
+      list.scrollTo({ left: li.offsetLeft - (list.clientWidth - li.offsetWidth) / 2, behavior: 'smooth' });
+    }
     window.addEventListener('resize', measure);
     return () => window.removeEventListener('resize', measure);
   }, [active, flow, t, lang]);

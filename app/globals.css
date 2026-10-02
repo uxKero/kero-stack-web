@@ -5770,3 +5770,51 @@ a.taste-card {
     animation-duration: 1ms;
   }
 }
+
+/* Phones */
+
+@media (max-width: 720px) {
+  .modes button {
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+
+  .hero-install {
+    right: var(--gutter);
+  }
+
+  .hero-install .install {
+    width: 100%;
+  }
+
+  .hero-install .install > .round {
+    display: none;
+  }
+
+  .hero-install .command {
+    flex: 1;
+    min-width: 0;
+    padding: 0 12px;
+  }
+
+  .setup-audit {
+    display: block;
+    max-width: 34ch;
+  }
+
+  .setup-audit svg {
+    display: inline-block;
+    margin-right: 6px;
+    vertical-align: -3px;
+  }
+}
+
+@media (max-width: 370px) {
+  .hero-install .command-prompt {
+    display: none;
+  }
+
+  .modes button {
+    padding: 0 10px;
+  }
+}
