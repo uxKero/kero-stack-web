@@ -109,23 +109,42 @@ code,
   justify-content: space-between;
 }
 
-.wordmark {
+.brand {
+  margin: 0;
   display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: -0.01em;
 }
 
-.wordmark-mark {
-  width: 18px;
-  height: 18px;
-  background:
-    linear-gradient(var(--ink), var(--ink)) 0 0 / 8px 8px no-repeat,
-    linear-gradient(var(--accent), var(--accent)) 10px 0 / 8px 8px no-repeat,
-    linear-gradient(var(--ink), var(--ink)) 0 10px / 8px 8px no-repeat,
-    linear-gradient(var(--ink), var(--ink)) 10px 10px / 8px 8px no-repeat;
+.wordmark {
+  display: inline-flex;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.wordmark b {
+  padding: 0.14em 0.26em 0.2em;
+  font-weight: inherit;
+}
+
+.wordmark b:first-child {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+.wordmark b:last-child {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.wordmark.is-dark b:first-child {
+  background: #f2efe8;
+  color: #0d0c0b;
+}
+
+.wordmark.is-small {
+  font-size: 14px;
+  margin-right: 8px;
 }
 
 .bar-nav {
@@ -4917,7 +4936,7 @@ a.taste-card {
   transform-origin: calc(50% - var(--d) * 50%) 50%;
   transform: translateX(calc(-50% + var(--d) * 230px)) translateZ(calc(var(--a) * -90px)) rotateY(calc(var(--d) * -38deg));
   z-index: calc(10 - var(--a));
-  transition: transform 720ms var(--ease), background 400ms var(--ease), color 400ms var(--ease);
+  transition: transform 720ms var(--ease), opacity 400ms var(--ease), background 400ms var(--ease), color 400ms var(--ease);
 }
 
 .agent:not(.is-on) {
@@ -5521,4 +5540,116 @@ a.taste-card {
   .deck-stage {
     height: 340px;
   }
+}
+
+.orca {
+  padding: clamp(72px, 12vh, 140px) var(--gutter) 0;
+}
+
+.orca-head {
+  max-width: 1200px;
+  margin: 0 auto 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.orca-name {
+  display: grid;
+  gap: 16px;
+}
+
+.orca-name h2 {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(32px, 4vw, 56px);
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.orca-copy {
+  display: grid;
+  gap: 16px;
+  max-width: 60ch;
+}
+
+.orca-copy p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 17px;
+  text-wrap: pretty;
+}
+
+.orca-copy p:first-child {
+  color: var(--ink);
+}
+
+.orca-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  margin-top: 8px;
+}
+
+.orca-get {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--ground);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 160ms var(--ease);
+}
+
+.orca-get:hover {
+  background: #2a2a2a;
+}
+
+.orca-by {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 4px;
+  transition: color 160ms var(--ease), text-decoration-color 160ms var(--ease);
+}
+
+.orca-by:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+.orca-shot {
+  max-width: 1200px;
+  margin: 0 auto;
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent);
+  mask-image: linear-gradient(to bottom, #000 50%, transparent);
+}
+
+.orca-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+@media (max-width: 1023px) {
+  .orca-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+.agent.is-away {
+  opacity: 0;
+  pointer-events: none;
 }

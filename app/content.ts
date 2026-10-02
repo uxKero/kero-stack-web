@@ -6,7 +6,7 @@ export const REPO = 'https://github.com/uxKero/kero-stack';
 
 export type StepId = 'orchestrate' | 'research' | 'scope' | 'direct' | 'survey' | 'extract' | 'systematize' | 'build' | 'measure' | 'judge' | 'record';
 export type Who = 'person' | 'agent';
-export type Visual = 'method' | 'research' | 'scope' | 'system' | 'audit' | 'blind' | 'orchestrate' | 'any' | 'bad' | 'motion' | 'type' | 'search';
+export type Visual = 'method' | 'research' | 'scope' | 'system' | 'audit' | 'blind' | 'orchestrate' | 'any' | 'bad' | 'motion' | 'type' | 'search' | 'orca';
 
 export type Scene = 'state' | 'size' | 'digits' | 'effect' | 'disabled' | 'info' | 'native' | 'generic' | 'ornament' | 'radius' | 'space' | 'scale' | 'shadow' | 'measure' | 'undo' | 'errors' | 'optical' | 'primary';
 
@@ -32,6 +32,7 @@ export const SKILL_NAMES: Record<string, string> = {
   emil: 'emil',
   typebien: 'typebien',
   saga: 'SAGA',
+  orca: 'Orca',
 };
 
 export const AUDIT_LINES = [
@@ -97,6 +98,7 @@ export type Copy = {
   paper: { read: string; close: string; do: string; dont: string; sources: string; people: string; example: string; why: string; how: string; edge: string; agents: string; copy: string; copied: string; enforced: string; prev: string; next: string };
   lumbre: { nav: string[]; hero: string; cta: string; products: { name: string; price: string }[]; spec: string; note: string; arrive: string };
   setup: { job: string; skills: string; ready: string };
+  orca: { title: string; body: string[]; by: string; open: string; alt: string };
   links: { title: string; items: { label: string; href: string }[] }[];
   deck: { title: string; prev: string; next: string; flip: string; back: string; hint: string };
   cards: Card[];
@@ -189,11 +191,24 @@ const cards = (es: boolean): Card[] => [
     href: REPO,
     io: es ? 'tarea grande → agentes en paralelo' : 'big task → agents in parallel',
     detail: es
-      ? 'Decide si conviene repartir y cómo: encargos autosuficientes, trabajo aislado, revisión con evidencia. Delega en subagentes propios, Orca, Cursor, Codex, Grok o generadores de imagen y video, siempre de forma opcional.'
-      : 'Decides whether splitting pays and how: self contained briefs, isolated work, review with evidence. Delegates to native sub agents, Orca, Cursor, Codex, Grok or image and video tools, always optional.',
+      ? 'Decide si conviene repartir y cómo: encargos autosuficientes, trabajo aislado, revisión con evidencia. Corre mejor en Orca. Delega en subagentes propios, workers de Orca, Cursor, Codex, Grok o generadores de imagen y video, siempre de forma opcional.'
+      : 'Decides whether splitting pays and how: self contained briefs, isolated work, review with evidence. Runs best in Orca. Delegates to native sub agents, Orca workers, Cursor, Codex, Grok or image and video tools, always optional.',
     install: INSTALL,
     visual: 'orchestrate',
     own: true,
+  },
+  {
+    id: 'orca',
+    name: 'Orca',
+    by: '@stablyai',
+    href: 'https://onorca.dev',
+    io: es ? 'agentes → worktrees en paralelo' : 'agents → parallel worktrees',
+    detail: es
+      ? 'Donde corre el stack. Claude Code, Codex y otros agentes lado a lado, cada uno en su worktree y a la vista en un solo lugar. kero-orchestrate usa su skill de orquestación cuando está instalado.'
+      : 'Where the stack runs. Claude Code, Codex and other agents side by side, each in its own worktree, tracked in one place. kero-orchestrate uses its orchestration skill when it is installed.',
+    install: 'orca skills install --skill orchestration',
+    visual: 'orca',
+    own: false,
   },
   {
     id: 'anydesign',
@@ -291,7 +306,7 @@ export const COPY: Record<Lang, Copy> = {
       out: 'Out',
       who: { person: 'Person', agent: 'Agent' },
       steps: {
-        orchestrate: { name: 'Orchestrate', who: 'agent', skills: ['kero-orchestrate'], out: 'one agent, or who does what' },
+        orchestrate: { name: 'Orchestrate', who: 'agent', skills: ['kero-orchestrate', 'orca'], out: 'one agent, or who does what' },
         research: { name: 'Research', who: 'agent', skills: ['kero-research'], out: 'findings and a thesis' },
         scope: { name: 'Scope', who: 'agent', skills: ['kero-scope', 'saga'], out: 'what the product does' },
         direct: { name: 'Direct', who: 'person', skills: ['kero-method'], out: 'references and direction' },
@@ -395,6 +410,16 @@ export const COPY: Record<Lang, Copy> = {
       arrive: 'Arrives Thursday',
     },
     setup: { job: 'Installing kero-stack', skills: '7 skills', ready: 'Restart your agent and bring your references.' },
+    orca: {
+      title: 'Where it runs',
+      body: [
+        'Orca is the tool I use the most. Every run of this stack happens there: Claude Code, Codex and the rest side by side, each agent in its own worktree, and every task in one place, on the desktop or from the phone.',
+        'When the method splits work, kero-orchestrate hands it to Orca. Without it the skills still work with a single agent; with it, the parallel part of the method stops being a juggling act.',
+      ],
+      by: 'Open source, by stablyai',
+      open: 'Get Orca',
+      alt: 'Orca running Claude Code and Codex in separate worktrees, with its mobile app beside the desktop window',
+    },
     links: [
       {
         title: 'Kero-stack',
@@ -416,6 +441,7 @@ export const COPY: Record<Lang, Copy> = {
           { label: "Emil's skills", href: 'https://github.com/emilkowalski/skills' },
           { label: 'typebien', href: 'https://github.com/uxKero/typebien' },
           { label: 'SAGA', href: 'https://github.com/uxKero/optimize-search-answers-agents' },
+          { label: 'Orca', href: 'https://onorca.dev' },
         ],
       },
       {
@@ -462,7 +488,7 @@ export const COPY: Record<Lang, Copy> = {
       out: 'Sale',
       who: { person: 'Persona', agent: 'Agente' },
       steps: {
-        orchestrate: { name: 'Orquestar', who: 'agent', skills: ['kero-orchestrate'], out: 'un solo agente, o quién hace qué' },
+        orchestrate: { name: 'Orquestar', who: 'agent', skills: ['kero-orchestrate', 'orca'], out: 'un solo agente, o quién hace qué' },
         research: { name: 'Investigar', who: 'agent', skills: ['kero-research'], out: 'hallazgos y una tesis' },
         scope: { name: 'Enlistar', who: 'agent', skills: ['kero-scope', 'saga'], out: 'qué hace el producto' },
         direct: { name: 'Dirigir', who: 'person', skills: ['kero-method'], out: 'referencias y dirección' },
@@ -566,6 +592,16 @@ export const COPY: Record<Lang, Copy> = {
       arrive: 'Llega el jueves',
     },
     setup: { job: 'Instalando kero-stack', skills: '7 skills', ready: 'Reinicia tu agente y trae tus referencias.' },
+    orca: {
+      title: 'Dónde corre',
+      body: [
+        'Orca es la herramienta que más uso. Cada corrida de este stack pasa ahí: Claude Code, Codex y el resto lado a lado, cada agente en su worktree y todas las tareas en un solo lugar, en el escritorio o desde el teléfono.',
+        'Cuando el método reparte el trabajo, kero-orchestrate se lo pasa a Orca. Sin Orca las skills funcionan igual con un solo agente; con Orca, la parte en paralelo del método deja de ser malabarismo.',
+      ],
+      by: 'Código abierto, de stablyai',
+      open: 'Bajar Orca',
+      alt: 'Orca con Claude Code y Codex en worktrees separados, con su app para el teléfono al lado de la ventana de escritorio',
+    },
     links: [
       {
         title: 'Kero-stack',
@@ -587,6 +623,7 @@ export const COPY: Record<Lang, Copy> = {
           { label: 'Skills de Emil', href: 'https://github.com/emilkowalski/skills' },
           { label: 'typebien', href: 'https://github.com/uxKero/typebien' },
           { label: 'SAGA', href: 'https://github.com/uxKero/optimize-search-answers-agents' },
+          { label: 'Orca', href: 'https://onorca.dev' },
         ],
       },
       {

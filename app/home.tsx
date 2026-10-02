@@ -8,11 +8,14 @@ import { Deck } from './deck';
 import { ScrollRail } from './scrollrail';
 import { ContextMenu } from './contextmenu';
 import { Band, Footer, HeroStage, Setup, SharedField, Taste } from './sections';
+import { Orca } from './orca';
+import { Wordmark } from './wordmark';
 
 const AGENTS = [
   ['Claude Code', '~/.claude/skills/', '.claude/skills/'],
   ['Codex', '~/.agents/skills/', '.agents/skills/'],
   ['Cursor', '~/.cursor/skills/', '.cursor/skills/'],
+  ['Grok', '~/.grok/skills/', '.grok/skills/'],
 ];
 
 function Install({ lang }: { lang: Lang }) {
@@ -89,9 +92,8 @@ export function Home({ lang }: { lang: Lang }) {
   return (
     <div className="page">
       <header className="bar">
-        <p className="wordmark">
-          <span className="wordmark-mark" aria-hidden="true" />
-          Kero-stack
+        <p className="brand">
+          <Wordmark />
         </p>
         <nav className="bar-nav">
           <a href={REPO} className="pill">{t.hero.github}</a>
@@ -119,6 +121,8 @@ export function Home({ lang }: { lang: Lang }) {
         <section className="method" id="method" aria-labelledby="method-title">
           <Run lang={lang} title={t.sections.run} />
         </section>
+
+        <Orca lang={lang} />
 
         <Taste lang={lang} />
       </main>

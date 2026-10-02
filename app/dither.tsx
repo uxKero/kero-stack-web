@@ -134,6 +134,17 @@ const SCENES: Record<Visual, SceneFn> = {
     });
     circle(c, hub.x, hub.y, 9, ON);
   },
+  orca(c, h, t) {
+    const speeds = [0.9, 1.25, 0.7];
+    speeds.forEach((v, i) => {
+      const y = h * 0.24 + i * h * 0.26;
+      const p = Math.min(1, cycle(t + i * 1.3, 4.2) * 1.5 * v);
+      line(c, [[8, y], [80, y]], 2, DIM);
+      line(c, [[8, y], [8 + 72 * p, y]], 2.6, ON);
+      circle(c, 8, y, 4, ON);
+      circle(c, 88, y, 5, p >= 1 ? HOT : DIM, p >= 1 ? 0 : 2);
+    });
+  },
   blind(c, h, t) {
     const pick = Math.floor(t / 2.4) % 2;
     [0, 1].forEach((i) => {

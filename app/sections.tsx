@@ -8,6 +8,7 @@ import { ARTICLES } from './articles';
 import { Example } from './examples';
 import { home, principlePath } from './site';
 import { Mascot } from './mascot';
+import { Wordmark } from './wordmark';
 import { COPY, INSTALL, type Lang, type Scene } from './content';
 import { DIM, Dither, HOT, ON, circle, cycle, ease, line, rect, text, type SceneFn } from './dither';
 
@@ -307,7 +308,7 @@ export function Paper({ lang, index, onIndex, onClose, standalone = false }: { l
     >
       <div className="dossier-bar">
         <p>
-          <span className="wordmark-mark" aria-hidden="true" />
+          <Wordmark small dark />
           {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </p>
         {standalone ? (
@@ -793,6 +794,7 @@ const AGENT_DIRS = [
   ['Claude Code', '~/.claude/skills/', '.claude/skills/'],
   ['Codex', '~/.agents/skills/', '.agents/skills/'],
   ['Cursor', '~/.cursor/skills/', '.cursor/skills/'],
+  ['Grok', '~/.grok/skills/', '.grok/skills/'],
 ];
 const SKILLS = ['kero-method', 'kero-research', 'kero-scope', 'kero-system', 'kero-audit', 'kero-blind', 'kero-orchestrate'];
 
@@ -856,14 +858,18 @@ export function Setup({ lang }: { lang: Lang }) {
 
       <div className="agents" role="tablist" aria-label={t.agents.agent} data-clear>
         {AGENT_DIRS.map(([name, personal, project], i) => {
-          const d = ((i - agent + 4) % 3) - 1;
+          const n = AGENT_DIRS.length;
+          const d = ((i - agent + n + 1) % n) - 1;
+          const away = Math.abs(d) > 1;
           return (
             <button
               key={name}
               type="button"
               role="tab"
               aria-selected={d === 0}
-              className={`glass agent ${d === 0 ? 'is-on' : ''}`}
+              className={`glass agent ${d === 0 ? 'is-on' : ''} ${away ? 'is-away' : ''}`}
+              tabIndex={away ? -1 : undefined}
+              aria-hidden={away || undefined}
               style={{ '--d': d, '--a': Math.abs(d) } as React.CSSProperties}
               onClick={() => choose(i)}
             >
@@ -1121,9 +1127,8 @@ export function Footer({ lang }: { lang: Lang }) {
       <div className="foot-inner">
       <div className="foot-top">
         <div className="foot-lead">
-          <p className="wordmark">
-            <span className="wordmark-mark" aria-hidden="true" />
-            Kero-stack
+          <p className="brand">
+            <Wordmark />
           </p>
           <p className="foot-line">{t.hero.line}</p>
         </div>
